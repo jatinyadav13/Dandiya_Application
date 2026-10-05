@@ -65,7 +65,7 @@ footer{text-align:center;color:#a8a2d0;font-size:14px;padding:0 16px 32px}
     <label>Full name<input id="n" maxlength="60" autocomplete="name"></label>
     <label>Mobile number<input id="p" inputmode="numeric" maxlength="10" autocomplete="tel"></label>
     <label>Email (optional)<input id="e" type="email" maxlength="80" autocomplete="email"></label>
-    <label><span id="dl">Course</span><input id="d" maxlength="80" placeholder="Example: BCA 2nd year"></label>
+    <label id="dwrap"><span id="dl">Course</span><input id="d" maxlength="80" placeholder="Example: BCA 2nd year"></label>
     <button class="btn" id="go" type="button">Register and pay ₹300</button>
     <p class="err" id="err" role="alert"></p>
   </section>
@@ -96,7 +96,7 @@ const upiUrl=r=>'upi://pay?pa='+encodeURIComponent(CFG.upiId)+'&pn='+encodeURICo
 const FEE={insider:300,outsider:400};let type='insider',CFG={};const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function setType(t){type=t;document.querySelectorAll('.opt').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
-  $('dl').textContent=t==='insider'?'Course':'College or organisation, and ID number';$('go').textContent='Register and pay ₹'+FEE[t];}
+  $('dl').textContent='Course';$('dwrap').style.display=t==='insider'?'':'none';$('go').textContent='Register and pay ₹'+FEE[t];}
 document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>setType(b.dataset.t));
 
 async function api(url,opts){const r=await fetch(url,opts);const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Something went wrong. Try again.');return j;}
@@ -129,7 +129,7 @@ async function lookup(p,m,errId){
   catch(e){const el=$(errId==='form'?'ferr':'ferr');el.textContent=e.message;}
 }
 $('go').onclick=async()=>{
-  const body={name:$('n').value,phone:$('p').value.trim(),email:$('e').value,detail:$('d').value,type};
+  const body={name:$('n').value,phone:$('p').value.trim(),email:$('e').value,detail:type==='insider'?$('d').value:'Outsider',type};
   $('err').textContent='';$('go').disabled=true;
   try{showPass(await api('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}),body.phone);}
   catch(e){$('err').textContent=e.message;$('go').disabled=false;}
