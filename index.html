@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dandiya Night 2026 – Regional College</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Rozha+One&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{--night:#17113f;--deep:#0f0a2c;--gold:#ffb400;--pink:#e6007e;--paper:#fff9f0;--ink:#1d1740;--mut:#6b6590;--line:#e6dccb}
+*{box-sizing:border-box}
+body{margin:0;background:var(--deep);color:#fff;font-family:"DM Sans",system-ui,sans-serif;line-height:1.55}
+.hero{position:relative;overflow:hidden;background:var(--night);padding:56px 20px 90px;text-align:center}
+.stick{position:absolute;width:14px;height:340px;border-radius:8px;background:repeating-linear-gradient(var(--gold) 0 18px,var(--pink) 18px 36px);opacity:.9}
+.s1{left:6%;top:-40px;transform:rotate(28deg)}.s2{right:6%;top:-40px;transform:rotate(-28deg)}
+.hero p.k{margin:0;color:var(--gold);font-weight:500;letter-spacing:.04em}
+.hero h1{position:relative;font:400 clamp(46px,11vw,104px)/1 "Rozha One",serif;margin:10px 0 14px;color:var(--gold)}
+.hero .sub{position:relative;font-size:18px;max-width:34ch;margin:0 auto 22px;color:#e9e4ff}
+.facts{position:relative;display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.facts span{border:1px solid rgba(255,255,255,.28);border-radius:99px;padding:6px 14px;font-size:15px}
+main{max-width:960px;margin:-56px auto 0;padding:0 16px 40px;display:grid;gap:18px;grid-template-columns:3fr 2fr;position:relative}
+@media(max-width:780px){main{grid-template-columns:1fr}}
+.card{background:var(--paper);color:var(--ink);border-radius:18px;padding:22px}
+h2{font:400 26px "Rozha One",serif;margin:0 0 4px}
+.hint{color:var(--mut);font-size:14px;margin:0 0 14px}
+.tix{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{font:inherit;color:var(--ink);background:#fff;border:2px solid var(--line);border-radius:12px;padding:12px 8px;cursor:pointer;text-align:center}
+.opt b{display:block;font:400 30px "Rozha One",serif;color:var(--pink)}
+.opt.on{border-color:var(--pink);background:#fff0f7}
+label{display:block;font-size:14px;font-weight:500;margin-top:12px}
+input{width:100%;margin-top:4px;padding:12px;font:inherit;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+input:focus,button:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
+.btn{width:100%;margin-top:16px;padding:14px;border:0;border-radius:12px;background:var(--pink);color:#fff;font:700 16px "DM Sans",sans-serif;cursor:pointer}
+.btn.alt{background:var(--ink)}
+.err{color:#b00020;font-size:14px;min-height:20px;margin:8px 0 0}
+.pass{border:2px dashed var(--pink);border-radius:16px;padding:20px;text-align:center;background:#fff}
+.pass .no{font:400 38px "Rozha One",serif;color:var(--pink);letter-spacing:3px}
+.tag{display:inline-block;padding:3px 12px;border-radius:99px;font-size:13px;font-weight:700}
+.ok{background:#dff5e3;color:#14692b}.wait{background:#fff0c2;color:#7a5600}
+.list{margin:0;padding-left:18px;color:var(--mut);font-size:14px}
+footer{text-align:center;color:#a8a2d0;font-size:14px;padding:0 16px 32px}
+@media print{body{background:#fff!important}body *{visibility:hidden!important}.pass,.pass *{visibility:visible!important}.noprint{display:none!important}.pass{position:absolute;left:0;top:0;width:100%;border:2px dashed #e6007e}}
+@media(prefers-reduced-motion:no-preference){.btn{transition:transform .15s}.btn:active{transform:scale(.98)}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="stick s1"></div><div class="stick s2"></div>
+  <p class="k">Regional College presents</p>
+  <h1>Dandiya Night</h1>
+  <p class="sub">An evening of garba, a live DJ, and dinner under the lights.</p>
+  <div class="facts"><span>Thursday, 15 October 2026</span><span>5 pm to 10 pm</span><span>Food included in the pass</span><span id="left" hidden></span></div>
+</header>
+
+<main>
+  <section class="card" id="form">
+    <h2>Get your pass</h2>
+    <p class="hint">Pick your ticket, register, then pay at the Cultural Committee desk.</p>
+    <div class="tix">
+      <button type="button" class="opt on" data-t="insider">Regional College student<b>₹300</b></button>
+      <button type="button" class="opt" data-t="outsider">Guest from outside<b>₹400</b></button>
+    </div>
+    <label>Full name<input id="n" maxlength="60" autocomplete="name"></label>
+    <label>Mobile number<input id="p" inputmode="numeric" maxlength="10" autocomplete="tel"></label>
+    <label>Email (optional)<input id="e" type="email" maxlength="80" autocomplete="email"></label>
+    <label><span id="dl">Course</span><input id="d" maxlength="80" placeholder="Example: BCA 2nd year"></label>
+    <button class="btn" id="go" type="button">Register and pay ₹300</button>
+    <p class="err" id="err" role="alert"></p>
+  </section>
+
+  <aside style="display:grid;gap:18px;align-content:start">
+    <section class="card" id="find">
+      <h2>Find my pass</h2>
+      <p class="hint">Already registered? Check your payment status.</p>
+      <label>Pass number<input id="fp" placeholder="RC-12345" maxlength="12"></label>
+      <label>Mobile number<input id="fm" inputmode="numeric" maxlength="10"></label>
+      <button class="btn alt" id="fgo" type="button">Show my pass</button>
+      <p class="err" id="ferr" role="alert"></p>
+    </section>
+    <section class="card">
+      <h2>Good to know</h2>
+      <ul class="list">
+        <li>Entry is by pass only.</li>
+        <li>Guests must carry a photo ID.</li>
+        <li>Your pass activates after payment is confirmed.</li>
+      </ul>
+    </section>
+  </aside>
+</main>
+<footer>Regional College · Cultural Committee</footer>
+
+<script>
+const upiUrl=r=>'upi://pay?pa='+encodeURIComponent(CFG.upiId)+'&pn='+encodeURIComponent(CFG.payee||'Regional College')+'&am='+r.amount+'&cu=INR&tn='+encodeURIComponent(r.passNo);
+const FEE={insider:300,outsider:400};let type='insider',CFG={};const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function setType(t){type=t;document.querySelectorAll('.opt').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  $('dl').textContent=t==='insider'?'Course':'College or organisation, and ID number';$('go').textContent='Register and pay ₹'+FEE[t];}
+document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>setType(b.dataset.t));
+
+async function api(url,opts){const r=await fetch(url,opts);const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Something went wrong. Try again.');return j;}
+
+function showPass(r,phone){
+  try{localStorage.setItem('dn',JSON.stringify({p:r.passNo,m:phone}))}catch(e){}
+  $('form').innerHTML=r.status==='paid'
+   ?`<div class="pass"><div class="hint">REGIONAL COLLEGE · DANDIYA NIGHT 2026</div><h2 style="margin:6px 0">${esc(r.name)}</h2>
+     <div class="no">${esc(r.passNo)}</div>
+     <p>${r.type==='insider'?'Student pass':'Guest pass'} · ₹${r.amount} paid <span class="tag ok">Confirmed</span></p>
+     <p class="hint">15 Oct 2026, 5 pm to 10 pm. Show this at the gate${r.type==='outsider'?' with photo ID':''}.</p>
+     ${r.checkedIn?'<span class="tag wait">Already checked in</span>':''}
+     <div id="pq" style="display:inline-block;margin:4px 0 8px"></div><br><button class="btn noprint" onclick="window.print()">Print or save pass</button></div>`
+   :`<h2>You're registered</h2><p>Hi ${esc(r.name)}, your pass number is <b>${esc(r.passNo)}</b>. Note it down.</p>
+     <p>Pay <b>₹${r.amount}</b> at the Cultural Committee desk. <span class="tag wait">Payment pending</span></p>
+     ${CFG.upiId?`<div style="text-align:center"><div id="qr" style="display:inline-block;padding:10px;background:#fff;border:1px solid var(--line);border-radius:12px"></div>
+     <p class="hint">Scan with GPay, PhonePe, or Paytm. The amount (₹${r.amount}) and your pass number are filled in.</p>
+     <a class="btn" style="display:block;text-decoration:none" href="${upiUrl(r)}">Pay ₹${r.amount} in your UPI app (on phone)</a></div>
+     <label>After paying, enter the UPI transaction ID (UTR)<input id="utr" maxlength="30" value="${esc(r.utr||'')}"></label>
+     <button class="btn alt" id="ub">I have paid</button><p class="hint" id="um"></p>`:'<p class="hint">Pay in cash at the Cultural Committee desk.</p>'}
+     <p class="hint">Once the committee confirms payment, come back and use Find my pass with your pass number and mobile.</p>
+     <button class="btn alt" id="rf">Check payment status</button>`;
+  const rf=$('rf');if(rf)rf.onclick=()=>lookup(r.passNo,phone,'form');
+  const q=$('qr');if(q&&window.QRCode)new QRCode(q,{text:upiUrl(r),width:190,height:190});
+  const pq=$('pq');if(pq&&window.QRCode)new QRCode(pq,{text:r.passNo,width:120,height:120});
+  const ub=$('ub');if(ub)ub.onclick=async()=>{try{await api('/api/utr',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({passNo:r.passNo,phone,utr:$('utr').value})});$('um').textContent='Thanks. The committee will confirm your payment shortly.';}catch(e){$('um').textContent=e.message;}};
+}
+async function lookup(p,m,errId){
+  try{showPass(await api('/api/pass?passNo='+encodeURIComponent(p)+'&phone='+encodeURIComponent(m)),m);}
+  catch(e){const el=$(errId==='form'?'ferr':'ferr');el.textContent=e.message;}
+}
+$('go').onclick=async()=>{
+  const body={name:$('n').value,phone:$('p').value.trim(),email:$('e').value,detail:$('d').value,type};
+  $('err').textContent='';$('go').disabled=true;
+  try{showPass(await api('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}),body.phone);}
+  catch(e){$('err').textContent=e.message;$('go').disabled=false;}
+};
+$('fgo').onclick=()=>{$('ferr').textContent='';lookup($('fp').value.trim(),$('fm').value.trim(),'find');};
+fetch('/api/config').then(r=>r.json()).then(c=>{CFG=c;if(c.left!==null){const l=$('left');l.hidden=false;l.textContent=c.left>0?c.left+' passes left':'Sold out';}}).catch(()=>{});
+try{const s=JSON.parse(localStorage.getItem('dn')||'null');if(s)lookup(s.p,s.m,'find');}catch(e){}
+</script>
+</body>
+</html>
