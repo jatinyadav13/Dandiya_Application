@@ -28,6 +28,27 @@ th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left;white-
 .mut{color:var(--mut);font-size:14px}.hide{display:none}
 @media print{header,#q,#f,.sm,#stats,.bar,#tgt{display:none!important}th:last-child,td:last-child{display:none}}
 #login{max-width:360px;margin:60px auto}
+
+/* ---- mobile friendly ---- */
+input,select{font-size:16px}
+.sm{min-height:38px}
+@media screen and (max-width:700px){
+ header{padding:12px 14px}header h1{font-size:20px}
+ main{padding:12px 10px 32px}
+ .card{padding:12px}
+ .wrap{overflow:visible}
+ thead{display:none}
+ table,tbody,tr,td{display:block;width:100%}
+ tr{border:1px solid var(--line);border-radius:12px;padding:8px;margin:10px 0}
+ td{border:0;white-space:normal;padding:3px 6px}
+ td:nth-child(1)::before{content:"Pass: ";color:var(--mut)}
+ td:nth-child(3)::before{content:"Mobile: ";color:var(--mut)}
+ td:nth-child(4)::before{content:"Ticket: ";color:var(--mut)}
+ td:nth-child(5)::before{content:"Amount: ₹";color:var(--mut)}
+ td:last-child{padding-top:8px}
+ .sm{padding:9px 14px;margin:4px 6px 0 0}
+ #login{margin:30px auto}
+}
 </style>
 </head>
 <body>
