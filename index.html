@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dandiya Night 2026 &amp;</title>
+<title>Dandiya Night 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Rozha+One&display=swap" rel="stylesheet">
@@ -25,15 +25,17 @@ main{max-width:960px;margin:-56px auto 0;padding:0 16px 40px;display:grid;gap:18
 .card{background:var(--paper);color:var(--ink);border-radius:18px;padding:22px}
 h2{font:400 26px "Rozha One",serif;margin:0 0 4px}
 .hint{color:var(--mut);font-size:14px;margin:0 0 14px}
-.tix{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tix{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .opt{font:inherit;color:var(--ink);background:#fff;border:2px solid var(--line);border-radius:12px;padding:12px 8px;cursor:pointer;text-align:center}
 .opt b{display:block;font:400 30px "Rozha One",serif;color:var(--pink)}
+.opt small{display:block;color:var(--mut);font-size:12px;margin-top:2px}
 .opt.on{border-color:var(--pink);background:#fff0f7}
 label{display:block;font-size:14px;font-weight:500;margin-top:12px}
-input{width:100%;margin-top:4px;padding:12px;font:inherit;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
-input:focus,button:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
+input,select{width:100%;margin-top:4px;padding:12px;font:inherit;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+input:focus,select:focus,button:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
 .btn{width:100%;margin-top:16px;padding:14px;border:0;border-radius:12px;background:var(--pink);color:#fff;font:700 16px "DM Sans",sans-serif;cursor:pointer}
 .btn.alt{background:var(--ink)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
 .err{color:#b00020;font-size:14px;min-height:20px;margin:8px 0 0}
 .pass{border:2px dashed var(--pink);border-radius:16px;padding:20px;text-align:center;background:#fff}
 .pass .no{font:400 38px "Rozha One",serif;color:var(--pink);letter-spacing:3px}
@@ -46,7 +48,7 @@ footer{text-align:center;color:#a8a2d0;font-size:14px;padding:0 16px 32px}
 
 /* ---- mobile friendly ---- */
 html{-webkit-text-size-adjust:100%}
-input{font-size:16px}
+input,select{font-size:16px}
 .btn{min-height:48px}
 .opt{min-height:68px}
 #qr img,#qr canvas,#pq img,#pq canvas{max-width:100%;height:auto}
@@ -59,7 +61,10 @@ input{font-size:16px}
  main{padding:0 12px 32px;margin-top:-46px;gap:14px}
  .card{padding:16px;border-radius:16px}
  h2{font-size:22px}
- .opt{font-size:14px;padding:10px 6px}.opt b{font-size:26px}
+ .tix{grid-template-columns:1fr}
+ .opt{display:flex;justify-content:space-between;align-items:center;text-align:left;padding:10px 14px;min-height:60px;font-size:15px}
+ .opt b{font-size:26px}
+ .opt small{margin-top:0}
  .pass{padding:14px}.pass .no{font-size:30px;letter-spacing:2px}
 }
 </style>
@@ -76,15 +81,18 @@ input{font-size:16px}
 <main>
   <section class="card" id="form">
     <h2>Get your pass</h2>
-    <p class="hint">Pick your ticket, register, then pay at the Cultural Committee desk.</p>
+    <p class="hint">Pick your ticket, register, then pay by UPI.</p>
     <div class="tix">
-      <button type="button" class="opt on" data-t="insider">Regional College student<b>₹300</b></button>
-      <button type="button" class="opt" data-t="outsider">Students from outside<b>₹400</b></button>
+      <button type="button" class="opt on" data-t="student"><span>Regional College student<small>1st year: ₹200</small></span><b id="ps">₹300</b></button>
+      <button type="button" class="opt" data-t="single"><span>From outside<small>Single (1 person)</small></span><b>₹300</b></button>
+      <button type="button" class="opt" data-t="couple"><span>From outside<small>Couple (2 people)</small></span><b>₹500</b></button>
     </div>
     <label>Full name<input id="n" maxlength="60" autocomplete="name"></label>
+    <label id="pwrap" style="display:none">Partner's full name<input id="pn2" maxlength="60"></label>
     <label>Mobile number<input id="p" inputmode="numeric" maxlength="10" autocomplete="tel"></label>
     <label>Email (optional)<input id="e" type="email" maxlength="80" autocomplete="email"></label>
-    <label id="dwrap"><span id="dl">Course</span><input id="d" maxlength="80" placeholder="Example: BCA 2nd year"></label>
+    <label id="ywrap">Year of study<select id="yr"><option value="">Select your year</option><option value="1">1st year (₹200)</option><option value="2">2nd year</option><option value="3">3rd year</option><option value="4">4th year</option></select></label>
+    <label id="dwrap"><span id="dl">Course</span><input id="d" maxlength="60" placeholder="Example: BCA"></label>
     <button class="btn" id="go" type="button">Register and pay ₹300</button>
     <p class="err" id="err" role="alert"></p>
   </section>
@@ -103,6 +111,8 @@ input{font-size:16px}
       <ul class="list">
         <li>Entry is by pass only.</li>
         <li>Your pass activates after payment is confirmed.</li>
+        <li>First-year students: carry your college ID. It is checked at the gate.</li>
+        <li>A couple pass admits two people together.</li>
       </ul>
     </section>
   </aside>
@@ -110,51 +120,109 @@ input{font-size:16px}
 <footer>Regional College · Cultural Committee</footer>
 
 <script>
-const upiUrl=r=>'upi://pay?pa='+encodeURIComponent(CFG.upiId)+'&pn='+encodeURIComponent(CFG.payee||'Regional College')+'&am='+r.amount+'&cu=INR&tn='+encodeURIComponent(r.passNo);
-const FEE={insider:300,outsider:400};let type='insider',CFG={};const $=id=>document.getElementById(id);
+const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function setType(t){type=t;document.querySelectorAll('.opt').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
-  $('dl').textContent='Course';$('dwrap').style.display=t==='insider'?'':'none';$('go').textContent='Register and pay ₹'+FEE[t];}
-document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>setType(b.dataset.t));
+let tk='student',CFG={};
+const isCouple=r=>r.ticket==='couple'||+r.guests===2;
+const price=()=>tk==='student'?($('yr').value==='1'?200:300):tk==='couple'?500:300;
+/* The amount is NOT put in the link or QR. Students type it in their UPI app. */
+const upiUrl=r=>'upi://pay?pa='+encodeURIComponent(CFG.upiId)+'&pn='+encodeURIComponent(CFG.payee||'Regional College')+'&cu=INR&tn='+encodeURIComponent(r.passNo);
 
-async function api(url,opts){const r=await fetch(url,opts);const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Something went wrong. Try again.');return j;}
+function refresh(){
+  document.querySelectorAll('.opt').forEach(b=>b.classList.toggle('on',b.dataset.t===tk));
+  $('ywrap').style.display=$('dwrap').style.display=tk==='student'?'':'none';
+  $('pwrap').style.display=tk==='couple'?'':'none';
+  $('ps').textContent='₹'+($('yr').value==='1'?200:300);
+  const soldOut=CFG.left===0;
+  $('go').textContent=soldOut?'Sold out':'Register and pay ₹'+price();
+  $('go').disabled=soldOut;
+}
+document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{tk=b.dataset.t;refresh();});
+$('yr').onchange=refresh;
+/* digits only in the mobile fields */
+['p','fm'].forEach(id=>$(id).oninput=e=>{e.target.value=e.target.value.replace(/\D/g,'');});
+
+async function api(url,opts){
+  let r;try{r=await fetch(url,opts);}catch(e){throw new Error('No internet connection. Check your network and try again.');}
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(j.error||'Something went wrong. Try again.');
+  return j;
+}
+
+/* QR library: wait for it, fall back to a second source */
+function whenQR(cb,n=0){
+  if(window.QRCode)return cb(true);
+  if(n===10&&!window.__qf){window.__qf=1;const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js';document.head.appendChild(s);}
+  if(n<30)setTimeout(()=>whenQR(cb,n+1),200);else cb(false);
+}
+function drawQR(el,text,w,failMsg){
+  if(!el)return;
+  whenQR(ok=>{el.innerHTML='';if(ok)new QRCode(el,{text,width:w,height:w});else if(failMsg)el.innerHTML='<p class="hint" style="width:'+w+'px;margin:0">'+failMsg+'</p>';});
+}
+const kind=r=>r.type==='insider'?'Student pass':isCouple(r)?'Couple pass (2 people)':'Guest pass';
+const another='<button class="btn alt noprint" id="nw" type="button">Register another person</button>';
 
 function showPass(r,phone){
   try{localStorage.setItem('dn',JSON.stringify({p:r.passNo,m:phone}))}catch(e){}
   $('form').innerHTML=r.status==='paid'
    ?`<div class="pass"><div class="hint">REGIONAL COLLEGE · DANDIYA NIGHT 2026</div><h2 style="margin:6px 0">${esc(r.name)}</h2>
      <div class="no">${esc(r.passNo)}</div>
-     <p>${r.type==='insider'?'Student pass':'Guest pass'} · ₹${r.amount} paid <span class="tag ok">Confirmed</span></p>
-     <p class="hint">15 Oct 2026, 5 pm to 10 pm. Show this at the gate${r.type==='outsider'?' with photo ID':''}.</p>
+     <p>${kind(r)} · ₹${esc(r.amount)} paid <span class="tag ok">Confirmed</span></p>
+     <p class="hint">15 Oct 2026, 5 pm to 10 pm. ${isCouple(r)?'Admits 2 people together. ':''}Show this at the gate with ${r.type==='outsider'?'photo ID':'your college ID'}.</p>
      ${r.checkedIn?'<span class="tag wait">Already checked in</span>':''}
-     <div id="pq" style="display:inline-block;margin:4px 0 8px"></div><br><button class="btn noprint" onclick="window.print()">Print or save pass</button></div>`
+     <div id="pq" style="display:inline-block;margin:4px 0 8px"></div><br><button class="btn noprint" onclick="window.print()">Print or save pass</button></div>${another}`
    :`<h2>You're registered</h2><p>Hi ${esc(r.name)}, your pass number is <b>${esc(r.passNo)}</b>. Note it down.</p>
-     <p>Pay <b>₹${r.amount}</b> at the Cultural Committee desk. <span class="tag wait">Payment pending</span></p>
-     ${CFG.upiId?`<div style="text-align:center"><div id="qr" style="display:inline-block;padding:10px;background:#fff;border:1px solid var(--line);border-radius:12px"></div>
-     <p class="hint">Scan with GPay, PhonePe, or Paytm. The amount (₹${r.amount}) and your pass number are filled in.</p>
-     <a class="btn" style="display:block;text-decoration:none" href="${upiUrl(r)}">Pay ₹${r.amount} in your UPI app (on phone)</a></div>
+     <p>${kind(r)} · Pay <b>₹${esc(r.amount)}</b> <span class="tag wait">Payment pending</span></p>
+     ${r.utr?`<p class="hint">Payment details received (transaction ID ${esc(r.utr)}). Waiting for the committee to confirm.</p>`:''}
+     ${CFG.upiId?`<div style="text-align:center"><div id="qr" style="display:inline-block;padding:10px;background:#fff;border:1px solid var(--line);border-radius:12px;min-width:210px;min-height:210px"></div>
+     <p class="hint">Scan with GPay, PhonePe, or Paytm and <b>enter ₹${esc(r.amount)}</b>. Your pass number is filled in as the note.</p>
+     <a class="btn" style="display:block;text-decoration:none" href="${upiUrl(r)}">Pay ₹${esc(r.amount)} in your UPI app (on phone)</a></div>
      <label>After paying, enter the UPI transaction ID (UTR)<input id="utr" maxlength="30" value="${esc(r.utr||'')}"></label>
-     <button class="btn alt" id="ub">I have paid</button><p class="hint" id="um"></p>`:'<p class="hint">Pay in cash at the Cultural Committee desk.</p>'}
+     <label>Amount you paid (₹)<input id="amt" inputmode="numeric" maxlength="5" placeholder="${esc(r.amount)}" value="${esc(r.paidAmount??'')}"></label>
+     <button class="btn alt" id="ub">I have paid</button><p class="hint" id="um" role="status"></p>`:'<p class="hint">Pay in cash at the Cultural Committee desk.</p>'}
      <p class="hint">Once the committee confirms payment, come back and use Find my pass with your pass number and mobile.</p>
-     <button class="btn alt" id="rf">Check payment status</button>`;
-  const rf=$('rf');if(rf)rf.onclick=()=>lookup(r.passNo,phone,'form');
-  const q=$('qr');if(q&&window.QRCode)new QRCode(q,{text:upiUrl(r),width:190,height:190});
-  const pq=$('pq');if(pq&&window.QRCode)new QRCode(pq,{text:r.passNo,width:120,height:120});
-  const ub=$('ub');if(ub)ub.onclick=async()=>{try{await api('/api/utr',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({passNo:r.passNo,phone,utr:$('utr').value})});$('um').textContent='Thanks. The committee will confirm your payment shortly.';}catch(e){$('um').textContent=e.message;}};
+     <button class="btn alt" id="rf">Check payment status</button><p class="err" id="rm" role="status"></p>${another}`;
+  const rf=$('rf');if(rf)rf.onclick=()=>lookup(r.passNo,phone,'rm');
+  const nw=$('nw');if(nw)nw.onclick=()=>{try{localStorage.removeItem('dn')}catch(e){}location.reload();};
+  if($('qr'))drawQR($('qr'),upiUrl(r),190,'QR could not load. Use the pay button below.');
+  if($('pq'))drawQR($('pq'),r.passNo,120,'');
+  const ub=$('ub');if(ub)ub.onclick=async()=>{
+    const amt=$('amt').value.trim();
+    if(!/^\d{1,5}$/.test(amt)||+amt<=0){$('um').textContent='Enter the amount you paid, in rupees (numbers only).';return;}
+    if(!$('utr').value.trim()){$('um').textContent='Enter the UPI transaction ID (UTR).';return;}
+    ub.disabled=true;
+    try{await api('/api/utr',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({passNo:r.passNo,phone,utr:$('utr').value.trim(),paidAmount:+amt})});$('um').textContent='Thanks. The committee will confirm your payment shortly.';}
+    catch(e){$('um').textContent=e.message;}
+    ub.disabled=false;};
 }
+/* errId = id of the element that shows an error; leave it out to fail silently */
 async function lookup(p,m,errId){
+  await ready;
   try{showPass(await api('/api/pass?passNo='+encodeURIComponent(p)+'&phone='+encodeURIComponent(m)),m);}
-  catch(e){const el=$(errId==='form'?'ferr':'ferr');el.textContent=e.message;}
+  catch(e){const el=errId&&$(errId);if(el)el.textContent=e.message;}
 }
 $('go').onclick=async()=>{
-  const body={name:$('n').value,phone:$('p').value.trim(),email:$('e').value,detail:type==='insider'?$('d').value:'Outsider',type};
-  $('err').textContent='';$('go').disabled=true;
-  try{showPass(await api('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}),body.phone);}
-  catch(e){$('err').textContent=e.message;$('go').disabled=false;}
+  const name=$('n').value.trim(),partner=$('pn2').value.trim(),yr=$('yr').value,course=$('d').value.trim(),phone=$('p').value.trim();
+  $('err').textContent='';
+  if(name.length<3){$('err').textContent='Enter your full name.';return;}
+  if(tk==='couple'&&partner.length<3){$('err').textContent="Enter your partner's full name.";return;}
+  if(!/^\d{10}$/.test(phone)){$('err').textContent='Enter a valid 10-digit mobile number.';return;}
+  if(tk==='student'&&!yr){$('err').textContent='Select your year of study.';return;}
+  if(tk==='student'&&!course){$('err').textContent='Enter your course.';return;}
+  const yl=['','1st','2nd','3rd','4th'][+yr]||'';
+  const detail=tk==='student'?(course+' · '+yl+' year'):tk==='couple'?'Outsider · Couple with '+partner:'Outsider';
+  const body={name,phone,email:$('e').value.trim(),detail,type:tk==='student'?'insider':'outsider',
+    ticket:tk==='couple'?'couple':'single',guests:tk==='couple'?2:1,year:tk==='student'?+yr:null,course:tk==='student'?course:'',partner:tk==='couple'?partner:''};
+  $('go').disabled=true;
+  try{await ready;showPass(await api('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}),body.phone);}
+  catch(e){$('err').textContent=e.message;refresh();}
 };
-$('fgo').onclick=()=>{$('ferr').textContent='';lookup($('fp').value.trim(),$('fm').value.trim(),'find');};
-fetch('/api/config').then(r=>r.json()).then(c=>{CFG=c;if(c.left!==null){const l=$('left');l.hidden=false;l.textContent=c.left>0?c.left+' passes left':'Sold out';}}).catch(()=>{});
-try{const s=JSON.parse(localStorage.getItem('dn')||'null');if(s)lookup(s.p,s.m,'find');}catch(e){}
+$('fgo').onclick=()=>{$('ferr').textContent='';lookup($('fp').value.trim(),$('fm').value.trim(),'ferr');};
+$('fp').oninput=e=>{e.target.value=e.target.value.toUpperCase();};
+/* load settings first, then restore a saved pass, so the QR and pay button always have the UPI ID */
+const ready=fetch('/api/config').then(r=>r.json()).then(c=>{CFG=c;if(typeof c.left==='number'){const l=$('left');l.hidden=false;l.textContent=c.left>0?c.left+' spots left':'Sold out';}refresh();}).catch(()=>{});
+ready.then(()=>{try{const s=JSON.parse(localStorage.getItem('dn')||'null');if(s)lookup(s.p,s.m);}catch(e){}});
+refresh();
 </script>
 </body>
 </html>
