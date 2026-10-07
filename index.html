@@ -175,8 +175,7 @@ function showPass(r,phone){
      <p>${kind(r)} · Pay <b>₹${esc(r.amount)}</b> <span class="tag wait">Payment pending</span></p>
      ${r.utr?`<p class="hint">Payment details received (transaction ID ${esc(r.utr)}). Waiting for the committee to confirm.</p>`:''}
      ${CFG.upiId?`<div style="text-align:center"><div id="qr" style="display:inline-block;padding:10px;background:#fff;border:1px solid var(--line);border-radius:12px;min-width:210px;min-height:210px"></div>
-     <p class="hint">Scan with GPay, PhonePe, or Paytm and <b>enter ₹${esc(r.amount)}</b>. Your pass number is filled in as the note.</p>
-     <a class="btn" style="display:block;text-decoration:none" href="${upiUrl(r)}">Pay ₹${esc(r.amount)} in your UPI app (on phone)</a></div>
+     <p class="hint">Scan this QR with GPay, PhonePe, or Paytm and <b>enter ₹${esc(r.amount)}</b>. Your pass number is filled in as the note.</p></div>
      <label>After paying, enter the UPI transaction ID (UTR)<input id="utr" maxlength="30" value="${esc(r.utr||'')}"></label>
      <label>Amount you paid (₹)<input id="amt" inputmode="numeric" maxlength="5" placeholder="${esc(r.amount)}" value="${esc(r.paidAmount??'')}"></label>
      <button class="btn alt" id="ub">I have paid</button><p class="hint" id="um" role="status"></p>`:'<p class="hint">Pay in cash at the Cultural Committee desk.</p>'}
@@ -184,7 +183,7 @@ function showPass(r,phone){
      <button class="btn alt" id="rf">Check payment status</button><p class="err" id="rm" role="status"></p>${another}`;
   const rf=$('rf');if(rf)rf.onclick=()=>lookup(r.passNo,phone,'rm');
   const nw=$('nw');if(nw)nw.onclick=()=>{try{localStorage.removeItem('dn')}catch(e){}location.reload();};
-  if($('qr'))drawQR($('qr'),upiUrl(r),190,'QR could not load. Use the pay button below.');
+  if($('qr'))drawQR($('qr'),upiUrl(r),190,'QR could not load. Refresh the page and try again.');
   if($('pq'))drawQR($('pq'),r.passNo,120,'');
   const ub=$('ub');if(ub)ub.onclick=async()=>{
     const amt=$('amt').value.trim();
