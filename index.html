@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dandiya Night 2026</title>
+<title>Dandiya Night 2026 &amp;</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Rozha+One&display=swap" rel="stylesheet">
@@ -31,10 +31,9 @@ h2{font:400 26px "Rozha One",serif;margin:0 0 4px}
 .opt.on{border-color:var(--pink);background:#fff0f7}
 label{display:block;font-size:14px;font-weight:500;margin-top:12px}
 input{width:100%;margin-top:4px;padding:12px;font:inherit;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
-input:focus,button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
-.btn{display:block;width:100%;margin-top:16px;padding:14px;border:0;border-radius:12px;background:var(--pink);color:#fff;font:700 16px "DM Sans",sans-serif;cursor:pointer;text-align:center;text-decoration:none}
+input:focus,button:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
+.btn{width:100%;margin-top:16px;padding:14px;border:0;border-radius:12px;background:var(--pink);color:#fff;font:700 16px "DM Sans",sans-serif;cursor:pointer}
 .btn.alt{background:var(--ink)}
-.btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--line)}
 .err{color:#b00020;font-size:14px;min-height:20px;margin:8px 0 0}
 .pass{border:2px dashed var(--pink);border-radius:16px;padding:20px;text-align:center;background:#fff}
 .pass .no{font:400 38px "Rozha One",serif;color:var(--pink);letter-spacing:3px}
@@ -42,18 +41,6 @@ input:focus,button:focus-visible,a:focus-visible{outline:3px solid var(--gold);o
 .ok{background:#dff5e3;color:#14692b}.wait{background:#fff0c2;color:#7a5600}
 .list{margin:0;padding-left:18px;color:var(--mut);font-size:14px}
 footer{text-align:center;color:#a8a2d0;font-size:14px;padding:0 16px 32px}
-
-/* payment */
-.payrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
-.payrow .btn{margin:0;padding:12px 4px;font-size:14px;background:#fff;color:var(--ink);border:2px solid var(--line)}
-.amt{font:400 34px "Rozha One",serif;color:var(--pink);margin:2px 0}
-.steps{margin:10px 0 0;padding-left:18px;color:var(--mut);font-size:14px}
-details.qrbox{margin-top:14px;text-align:center}
-details.qrbox summary{cursor:pointer;color:var(--mut);font-size:14px}
-.copyrow{display:flex;gap:8px;align-items:center;margin-top:12px;font-size:14px;justify-content:center;flex-wrap:wrap}
-.copyrow code{background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 10px}
-.copyrow button{font:inherit;font-size:14px;border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer}
-
 @media print{body{background:#fff!important}body *{visibility:hidden!important}.pass,.pass *{visibility:visible!important}.noprint{display:none!important}.pass{position:absolute;left:0;top:0;width:100%;border:2px dashed #e6007e}}
 @media(prefers-reduced-motion:no-preference){.btn{transition:transform .15s}.btn:active{transform:scale(.98)}}
 
@@ -89,7 +76,7 @@ input{font-size:16px}
 <main>
   <section class="card" id="form">
     <h2>Get your pass</h2>
-    <p class="hint">Pick your ticket, register, then pay online with any UPI app.</p>
+    <p class="hint">Pick your ticket, register, then pay at the Cultural Committee desk.</p>
     <div class="tix">
       <button type="button" class="opt on" data-t="insider">Regional College student<b>₹300</b></button>
       <button type="button" class="opt" data-t="outsider">Students from outside<b>₹400</b></button>
@@ -123,47 +110,16 @@ input{font-size:16px}
 <footer>Regional College · Cultural Committee</footer>
 
 <script>
-const FEE={insider:300,outsider:400};let type='insider',CFG={},poll=null;const $=id=>document.getElementById(id);
-const UA=navigator.userAgent,isIOS=/iPhone|iPad|iPod/i.test(UA),isMobile=/Android|iPhone|iPad|iPod/i.test(UA);
+const upiUrl=r=>'upi://pay?pa='+encodeURIComponent(CFG.upiId)+'&pn='+encodeURIComponent(CFG.payee||'Regional College')+'&am='+r.amount+'&cu=INR&tn='+encodeURIComponent(r.passNo);
+const FEE={insider:300,outsider:400};let type='insider',CFG={};const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-
-/* UPI links: one generic link (phone shows its app chooser) + direct links per app */
-const upiQ=r=>'pa='+encodeURIComponent(CFG.upiId)+'&pn='+encodeURIComponent(CFG.payee||'Regional College')+'&am='+Number(r.amount).toFixed(2)+'&cu=INR&tn='+encodeURIComponent(r.passNo);
-const upiUrl=r=>'upi://pay?'+upiQ(r);
-const gpayUrl=r=>(isIOS?'gpay://upi/pay?':'tez://upi/pay?')+upiQ(r);
-const phonepeUrl=r=>'phonepe://pay?'+upiQ(r);
-const paytmUrl=r=>'paytmmp://pay?'+upiQ(r);
-
 function setType(t){type=t;document.querySelectorAll('.opt').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
   $('dl').textContent='Course';$('dwrap').style.display=t==='insider'?'':'none';$('go').textContent='Register and pay ₹'+FEE[t];}
 document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>setType(b.dataset.t));
 
 async function api(url,opts){const r=await fetch(url,opts);const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Something went wrong. Try again.');return j;}
 
-function payHtml(r){
-  if(!CFG.upiId)return '<p class="hint">Pay in cash at the Cultural Committee desk.</p>';
-  const qrBlock=`<div id="qr" style="display:inline-block;padding:10px;background:#fff;border:1px solid var(--line);border-radius:12px;margin-top:10px"></div>`;
-  const apps=isMobile
-   ?`<a class="btn" id="payNow" href="${upiUrl(r)}">Pay ₹${r.amount} with UPI</a>
-     <div class="payrow">
-       <a class="btn" href="${gpayUrl(r)}">GPay</a>
-       <a class="btn" href="${phonepeUrl(r)}">PhonePe</a>
-       <a class="btn" href="${paytmUrl(r)}">Paytm</a>
-     </div>
-     <details class="qrbox"><summary>Using another phone? Show QR</summary>${qrBlock}</details>`
-   :`<p class="hint" style="margin-top:12px">Open GPay, PhonePe or Paytm on your phone and scan:</p>
-     <div style="text-align:center">${qrBlock}</div>`;
-  return `<div style="text-align:center;margin-top:6px"><div class="hint" style="margin:0">Amount to pay</div><div class="amt">₹${r.amount}</div></div>
-    ${apps}
-    <div class="copyrow"><span>UPI ID:</span><code>${esc(CFG.upiId)}</code><button type="button" id="cp">Copy</button></div>
-    <ol class="steps"><li>Tap the button, pay in your UPI app, then come back to this page.</li>
-      <li>Enter the UTR / transaction ID shown after payment.</li></ol>
-    <label>UPI transaction ID (UTR)<input id="utr" inputmode="numeric" maxlength="30" value="${esc(r.utr||'')}"></label>
-    <button class="btn alt" id="ub" type="button">I have paid</button><p class="hint" id="um"></p>`;
-}
-
 function showPass(r,phone){
-  clearInterval(poll);
   try{localStorage.setItem('dn',JSON.stringify({p:r.passNo,m:phone}))}catch(e){}
   $('form').innerHTML=r.status==='paid'
    ?`<div class="pass"><div class="hint">REGIONAL COLLEGE · DANDIYA NIGHT 2026</div><h2 style="margin:6px 0">${esc(r.name)}</h2>
@@ -172,26 +128,23 @@ function showPass(r,phone){
      <p class="hint">15 Oct 2026, 5 pm to 10 pm. Show this at the gate${r.type==='outsider'?' with photo ID':''}.</p>
      ${r.checkedIn?'<span class="tag wait">Already checked in</span>':''}
      <div id="pq" style="display:inline-block;margin:4px 0 8px"></div><br><button class="btn noprint" onclick="window.print()">Print or save pass</button></div>`
-   :`<h2>You're registered</h2><p>Hi ${esc(r.name)}, your pass number is <b>${esc(r.passNo)}</b>. Note it down. <span class="tag wait">Payment pending</span></p>
-     ${payHtml(r)}
-     <button class="btn ghost" id="rf" type="button">Check payment status</button>`;
+   :`<h2>You're registered</h2><p>Hi ${esc(r.name)}, your pass number is <b>${esc(r.passNo)}</b>. Note it down.</p>
+     <p>Pay <b>₹${r.amount}</b> at the Cultural Committee desk. <span class="tag wait">Payment pending</span></p>
+     ${CFG.upiId?`<div style="text-align:center"><div id="qr" style="display:inline-block;padding:10px;background:#fff;border:1px solid var(--line);border-radius:12px"></div>
+     <p class="hint">Scan with GPay, PhonePe, or Paytm. The amount (₹${r.amount}) and your pass number are filled in.</p>
+     <a class="btn" style="display:block;text-decoration:none" href="${upiUrl(r)}">Pay ₹${r.amount} in your UPI app (on phone)</a></div>
+     <label>After paying, enter the UPI transaction ID (UTR)<input id="utr" maxlength="30" value="${esc(r.utr||'')}"></label>
+     <button class="btn alt" id="ub">I have paid</button><p class="hint" id="um"></p>`:'<p class="hint">Pay in cash at the Cultural Committee desk.</p>'}
+     <p class="hint">Once the committee confirms payment, come back and use Find my pass with your pass number and mobile.</p>
+     <button class="btn alt" id="rf">Check payment status</button>`;
   const rf=$('rf');if(rf)rf.onclick=()=>lookup(r.passNo,phone,'form');
   const q=$('qr');if(q&&window.QRCode)new QRCode(q,{text:upiUrl(r),width:190,height:190});
   const pq=$('pq');if(pq&&window.QRCode)new QRCode(pq,{text:r.passNo,width:120,height:120});
-  const cp=$('cp');if(cp)cp.onclick=()=>{const done=()=>cp.textContent='Copied';
-    if(navigator.clipboard)navigator.clipboard.writeText(CFG.upiId).then(done,()=>{});else done();};
-  const ub=$('ub');if(ub)ub.onclick=async()=>{try{await api('/api/utr',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({passNo:r.passNo,phone,utr:$('utr').value})});$('um').textContent='Thanks. The committee will confirm your payment shortly. This page updates by itself.';}catch(e){$('um').textContent=e.message;}};
-  if(r.status!=='paid'){
-    /* when the student returns from the UPI app, jump to the UTR box */
-    const back=()=>{if(!document.hidden){const u=$('utr');if(u&&!u.value)u.focus();}};
-    document.removeEventListener('visibilitychange',window._vc);window._vc=back;document.addEventListener('visibilitychange',back);
-    /* auto-check status so the pass appears as soon as the committee confirms */
-    poll=setInterval(async()=>{try{const x=await api('/api/pass?passNo='+encodeURIComponent(r.passNo)+'&phone='+encodeURIComponent(phone));if(x.status==='paid')showPass(x,phone);}catch(e){}},8000);
-  }
+  const ub=$('ub');if(ub)ub.onclick=async()=>{try{await api('/api/utr',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({passNo:r.passNo,phone,utr:$('utr').value})});$('um').textContent='Thanks. The committee will confirm your payment shortly.';}catch(e){$('um').textContent=e.message;}};
 }
 async function lookup(p,m,errId){
   try{showPass(await api('/api/pass?passNo='+encodeURIComponent(p)+'&phone='+encodeURIComponent(m)),m);}
-  catch(e){$('ferr').textContent=e.message;}
+  catch(e){const el=$(errId==='form'?'ferr':'ferr');el.textContent=e.message;}
 }
 $('go').onclick=async()=>{
   const body={name:$('n').value,phone:$('p').value.trim(),email:$('e').value,detail:type==='insider'?$('d').value:'Outsider',type};
@@ -200,9 +153,8 @@ $('go').onclick=async()=>{
   catch(e){$('err').textContent=e.message;$('go').disabled=false;}
 };
 $('fgo').onclick=()=>{$('ferr').textContent='';lookup($('fp').value.trim(),$('fm').value.trim(),'find');};
-/* load config first so the UPI buttons are ready before any pass is shown */
-fetch('/api/config').then(r=>r.json()).then(c=>{CFG=c;if(c.left!==null){const l=$('left');l.hidden=false;l.textContent=c.left>0?c.left+' passes left':'Sold out';}}).catch(()=>{})
- .finally(()=>{try{const s=JSON.parse(localStorage.getItem('dn')||'null');if(s)lookup(s.p,s.m,'find');}catch(e){}});
+fetch('/api/config').then(r=>r.json()).then(c=>{CFG=c;if(c.left!==null){const l=$('left');l.hidden=false;l.textContent=c.left>0?c.left+' passes left':'Sold out';}}).catch(()=>{});
+try{const s=JSON.parse(localStorage.getItem('dn')||'null');if(s)lookup(s.p,s.m,'find');}catch(e){}
 </script>
 </body>
 </html>
